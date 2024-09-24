@@ -1,0 +1,20 @@
+body {
+
+    margin: 0;
+    background-color: rgb(189, 163, 163);
+}
+
+.chat-container {
+    width: 800px;
+    max-height: 600px;
+    max-width: 100%;
+    border-radius: 8px;
+    overflow: auto;
+}
+
+.chatbox {
+    background-color: white;
+    overflow: auto;
+    width: 100%;
+    padding: 10px;
+}
