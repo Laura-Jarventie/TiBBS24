@@ -18,3 +18,12 @@ body {
     width: 100%;
     padding: 10px;
 }
+
+.message {
+    margin-bottom: 10px;
+}
+
+.user-message {
+    text-align: left;
+    font-weight: bold;
+}
