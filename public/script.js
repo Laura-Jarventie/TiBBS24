@@ -6,13 +6,27 @@ document.getElementById('user-input').addEventListener('keypress', function (e) 
     }
 });
 
-function sendMessage(){
+async function sendMessage(){
     const userInput = document.getElementById('user-input').value;
     if (userInput.trim() == '') return;
     console.log(userInput);
     document.getElementById('user-input').value='';
 
     addMessageToChatbox('Sinä:' + userInput, 'user-message', 'chatbox');
+
+    const response = await fetch('/get-question',{
+        method: 'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({question:userInput})
+    });
+
+    console.log(response);
+    const data = await response.json();
+    console.log(data);
+    addMessageToChatbox('CHAT: ' + data.question, "chat-message", 'chatbox')
+
 };
 
 function addMessageToChatbox(message, className, box) {
