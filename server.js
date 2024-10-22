@@ -1,5 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import dotevn from 'dotenv';
+
+dotevn.config();
 
 const app = express();
 const port = 3000;
@@ -24,3 +27,17 @@ app.listen(port, () => {
     console.log("Avaa serveri sivulta http://localhost:3000")
 }
 )
+
+
+/* 
+
+app.post('/chat', async (req, res) => {
+  try {
+   
+  }catch (error) {
+  console.error('Virheviesti:', error.message);
+  res.status(500).json({error: 'Internal Server Error' });
+  }
+   }); 
+   
+   */
