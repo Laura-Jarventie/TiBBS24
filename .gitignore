@@ -1,1 +1,4 @@
 node_modules/
+
+#estä .env-tiedoston seuranta
+.env
