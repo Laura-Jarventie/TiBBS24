@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import dotevn from 'dotenv';
 
 dotevn.config();
-
+// HUOM! UUSI API KEY .ENV FILEEN
 const app = express();
 const port = 3000;
 
