@@ -34,7 +34,7 @@ app.post('/chat', async (req, res) => {
 const data = await response.json();
 console.log('API vastaus:', data.choices[0].message.content);
 
-const reply = data.choices[0].message.content;
+const reply = data.choices[0].message.content
 res.json ({ reply })
 
   

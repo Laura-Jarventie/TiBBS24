@@ -1,10 +1,15 @@
 document.getElementById('send-button').addEventListener('click', sendMessage);
+document.getElementById('send-answer-button').addEventListener('click', sendImage);
 
 document.getElementById('user-input').addEventListener('keypress', function (e) {
     if (e.key === 'Enter') {
         sendMessage();
     }
 });
+
+function sendImage(){
+    console.log('koplattu');
+}
 
 async function sendMessage(){
     const userInput = document.getElementById('user-input').value;
@@ -27,7 +32,7 @@ async function sendMessage(){
         console.log(response);
         const data = await response.json();
         console.log(data);
-        addMessageToChatbox('CHAT: ' + data.question, "chat-message", 'chatbox')
+        addMessageToChatbox('CHATGPT:n vastaus: ' + data.reply, "chat-message", 'chatbox')
 
     }catch (error) {
     console.error('Error:', error);
