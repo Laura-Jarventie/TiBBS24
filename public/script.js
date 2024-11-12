@@ -7,8 +7,37 @@ document.getElementById('user-input').addEventListener('keypress', function (e) 
     }
 });
 
-function sendImage(){
-    console.log('koplattu');
+async function sendImage(){
+    const imageInput = document.getElementById('image-input');
+    const files = imageInput.files;
+
+    if(files.length === 0){
+        alert('Valitse kuvia ensin');
+        return;
+    }
+
+    const formData = new FormData();
+    for (let i=0; i<files.length; i++ ){
+        formData.append('images', files[i]);
+    }
+
+    console.log(formData.getAll('images'));
+
+    try {
+
+        const response = await fetch('/upload-images',{
+            method: 'POST',
+            body:formData
+        });
+
+
+    }catch (error) {
+    console.error('Error:', error);
+    addMessageToChatbox('ChatGPT: Jotain meni pieleen. Yritä uudelleen myöhemmin.', 'bot-message','chatbox');
+   
+    }
+
+
 }
 
 async function sendMessage(){
