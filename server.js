@@ -1,6 +1,8 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotevn from 'dotenv';
+import multer from 'multer'
+
 
 dotevn.config();
 const app = express();
@@ -8,6 +10,8 @@ const port = 3000;
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
+
+const upload = multer({ dest: 'uploads/' });
 
 
 app.post('/chat', async (req, res) => {
@@ -39,10 +43,25 @@ res.json ({ reply })
 
   
   }catch (error) {
-  console.error('Virheviesti:', error.message);
-  res.status(500).json({error: 'Internal Server Error' });
+    console.error('Virheviesti:', error.message);
+    res.status(500).json({error: 'Internal Server Error' });
   }
-   }); 
+  }); 
+
+
+//upload-images rajapinta
+app.post('/upload-images', upload.array('images', 10), async (req, res) => {
+    try {
+      
+      const files = req.files;
+      console.log(files);
+      res.json("Kuvat vastaanotettu");
+
+    }catch (error) {
+      console.error('Virheviesti:', error.message);
+      res.status(500).json({error: 'Internal Server Error' });
+    }
+}); 
 
 
 
