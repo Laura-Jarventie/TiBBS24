@@ -1,7 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotevn from 'dotenv';
-import multer from 'multer'
+import multer from 'multer';
+import vision from '@google-cloud/vision';
+import fs from 'fs';
 
 
 dotevn.config();
@@ -12,6 +14,11 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 
 const upload = multer({ dest: 'uploads/' });
+
+const client = new vision.ImageAnnotatorClient({
+  keyFilename: 'omaope-vision.json' 
+});
+
 
 
 app.post('/chat', async (req, res) => {
@@ -55,7 +62,23 @@ app.post('/upload-images', upload.array('images', 10), async (req, res) => {
       
       const files = req.files;
       console.log(files);
-      res.json("Kuvat vastaanotettu");
+      
+      //Odotetaan, että kaikki kuvat on käsitelty OCR:n avulla, eli jokaisen kuvan teksti tunnistetaan.
+      const texts = await Promise.all(files.map(async file => {
+      // suoritetaan, että saadaan tiedostopolku kuvalle, jonka OCR-tunnistus halutaan suorittaa. 
+      const imagePath = file.path;
+      console.log(imagePath);
+      // kutsu GCV API:lle, joka suorittaa OCR:n annetulle kuvalle
+      const [result] = await client.textDetection(imagePath);
+      //ottaa result-muuttujasta kaikki tekstintunnistusmerkinnät (textAnnotations), jotka sisältävät kaikki kuvasta tunnistetut tekstialueet.
+      const detections = result.textAnnotations;
+      console.log(detections);
+      // poistaa tiedoston, joka on luotu kuvan lähettämisen yhteydessä
+      fs.unlinkSync(imagePath); 
+      // Koodi tarkistaa, löytyykö kuvasta OCR-tunnistuksen perusteella tekstiä. Jos löytyy, se palauttaa tämän tekstin. Jos ei, se palauttaa tyhjän merkkijonon 
+      return detections.length > 0 ? detections[0].description : '';
+      }));
+
 
     }catch (error) {
       console.error('Virheviesti:', error.message);
