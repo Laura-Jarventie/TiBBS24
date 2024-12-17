@@ -21,6 +21,8 @@ const client = new vision.ImageAnnotatorClient({
 
 let koealueTekstina = '';
 let context = [];
+let currentQuestion = ''; //Muuttuja kysymyksen tallentamiseen
+let correctAnswer = ''; // Muuttuja oikean vastauksen tallentamiseen
 
 
 
@@ -114,12 +116,16 @@ app.post('/upload-images', upload.array('images', 10), async (req, res) => {
         return res.status(400).json({ error: 'Model could not generate a valid question. Please provide a clearer text.' })
       }
 
+      currentQuestion = question.trim(); // Päivitetään nykyinen kysymys
+      correctAnswer = answer.trim(); // Päivitetään oikea vastaus
 
-  
+       // Update context with the new question and answer
+       context.push({ role: 'assistant', content: `Kysymys: ${currentQuestion}` });
+       context.push({ role: 'assistant', content: `Vastaus: ${correctAnswer}` });
 
-
-
-    }catch (error) {
+       res.json({ question: currentQuestion, answer: correctAnswer });
+       
+    } catch (error) {
       console.error('Virheviesti:', error.message);
       res.status(500).json({error: 'Internal Server Error' });
     }

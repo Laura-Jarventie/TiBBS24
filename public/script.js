@@ -1,3 +1,6 @@
+let currentQuestion = ''; //Muuttuja kysymyksen tallentamiseen
+let correctAnswer = ''; // Muuttuja oikean vastauksen tallentamiseen
+
 document.getElementById('send-button').addEventListener('click', sendMessage);
 document.getElementById('send-answer-button').addEventListener('click', sendImage);
 
@@ -29,8 +32,17 @@ async function sendImage(){
             method: 'POST',
             body:formData
         });
-        console.log(response);
+
         const data = await response.json();
+        currentQuestion = data.question;
+        correctAnswer = data.answer;
+        console.log(currentQuestion);
+        console.log(correctAnswer);
+        addMessageToChatbox('OmaOpe: ' + data.question, 'bot-message', 'omaopebox');
+
+
+        console.log(response);
+       
         console.log(data);
 
     }catch (error) {
